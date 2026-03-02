@@ -1,0 +1,88 @@
+.root {
+  padding: 0;
+  font-family: system-ui, -apple-system, sans-serif;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg);
+}
+
+.pdfInput {
+  display: none;
+}
+
+.mainLayout {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.mainRow {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  overflow: hidden;
+}
+
+.rightColumn {
+  position: fixed;
+  top: 12px;
+  right: 24px;
+  z-index: var(--zindex-7);
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0;
+  width: 208px;
+  height: calc(100vh - 12px * 2 - 40px - 12px);
+}
+
+.centerArea {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  z-index: var(--zindex-3);
+  position: relative;
+}
+
+.emptyState {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.loadingText {
+  color: var(--color-text-secondary);
+  font-size: 14px;
+}
+
+.fullscreenBtn {
+  position: fixed;
+  bottom: 12px;
+  right: 12px;
+  z-index: var(--zindex-5);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 8px;
+  background: var(--color-surface);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover {
+    background: var(--color-bg);
+  }
+
+  &:focus {
+    outline: none;
+  }
+}

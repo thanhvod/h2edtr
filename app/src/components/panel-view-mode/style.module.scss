@@ -1,0 +1,33 @@
+.wrapper {
+  display: flex;
+  gap: 0;
+}
+
+.btn {
+  padding: 8px 12px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 400;
+
+  &:hover {
+    background: var(--color-secondary-10);
+  }
+
+  &.active {
+    background: var(--color-accent-muted);
+    color: var(--color-accent);
+    font-weight: 600;
+  }
+
+  &.left {
+    border-radius: 4px 0 0 4px;
+    border-right: none;
+  }
+
+  &.right {
+    border-radius: 0 4px 4px 0;
+  }
+}

@@ -1,0 +1,94 @@
+.scrollContainer {
+  overflow: auto;
+  height: 100%;
+}
+
+.scrollContainerCentered {
+  overflow: auto;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.pagePlaceholder {
+  width: var(--page-w);
+  height: var(--page-h);
+  background: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  font-size: 14px;
+  pointer-events: none;
+}
+
+.pageImage {
+  width: var(--page-w);
+  height: var(--page-h);
+  object-fit: fill;
+  display: block;
+  pointer-events: none;
+}
+
+.contentFrame {
+  width: var(--scaled-width);
+  height: var(--content-height);
+  padding-bottom: var(--bottom-toolbar-height);
+  box-sizing: content-box;
+}
+
+.contentInner {
+  width: var(--scaled-width);
+  height: var(--content-height);
+  position: relative;
+}
+
+.contentFrameNonVirtual {
+  width: var(--scaled-width);
+  min-height: var(--scaled-height);
+  padding-bottom: var(--bottom-toolbar-height);
+  box-sizing: content-box;
+  margin: 0 auto;
+}
+
+.contentInnerNonVirtual {
+  position: relative;
+  width: var(--scaled-width);
+  min-height: var(--scaled-height);
+}
+
+.overlayWrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--overlay-width);
+  height: var(--overlay-height);
+  pointer-events: auto;
+  overflow: hidden;
+  /* Optimize render: create separate layer */
+  contain: paint;
+  transform: translateZ(0);
+}
+
+.overlayInner {
+  pointer-events: auto;
+  /* Use zoomed dimensions directly instead of transform:scale to avoid
+     Pixi pointer coordinate mismatch when canvas is inside scaled container */
+  width: var(--overlay-width);
+  height: var(--overlay-height);
+}
+
+.virtualRow {
+  position: absolute;
+  left: var(--margin-left-scaled);
+  width: var(--page-w);
+  pointer-events: none;
+}
+
+.pagesColumn {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-scaled);
+  margin-left: var(--margin-left-scaled);
+  pointer-events: none;
+}

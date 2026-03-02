@@ -1,0 +1,163 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String    @id @default(uuid())
+  deviceId    String    @unique @map("device_id")
+  userAgent   String?   @map("user_agent")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  lastLoginAt DateTime? @map("last_login_at")
+
+  pdfFiles       PdfFile[]
+  capturedImages CapturedImage[]
+
+  @@map("users")
+}
+
+model PdfFile {
+  id              String   @id @default(uuid())
+  sequenceId      Int      @unique @default(autoincrement()) @map("sequence_id")
+  userId          String   @map("user_id")
+  filename        String   @map("filename")
+  fileSize        BigInt?  @map("file_size")
+  numPages        Int?     @map("num_pages")
+  thumbnailBase64 String?  @map("thumbnail_base64") @db.Text
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  user        User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  state       PdfState?
+  pageImages  PdfPageImage[]
+  shapes          PdfShape[]
+  pins            PdfPin[]
+  groups          PdfGroup[]
+  capturedImages  CapturedImage[]
+
+  @@index([userId])
+  @@map("pdf_files")
+}
+
+model PdfPageImage {
+  id          String   @id @default(uuid())
+  sequenceId  Int      @unique @default(autoincrement()) @map("sequence_id")
+  pdfFileId   String   @map("pdf_file_id")
+  pageNumber  Int      @map("page_number")
+  width       Int
+  height      Int
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  pdfFile PdfFile @relation(fields: [pdfFileId], references: [id], onDelete: Cascade)
+
+  @@unique([pdfFileId, pageNumber])
+  @@index([pdfFileId])
+  @@map("pdf_page_images")
+}
+
+model PdfShape {
+  id           String   @id @default(uuid())
+  pdfFileId    String   @map("pdf_file_id")
+  pageNumber   Int      @map("page_number")
+  type         String
+  x            Float
+  y            Float
+  width        Float?
+  height       Float?
+  radius       Float?
+  color        String?
+  borderWidth  Float?   @map("border_width")
+  radiusCorner Float?   @map("radius_corner")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  pdfFile PdfFile @relation(fields: [pdfFileId], references: [id], onDelete: Cascade)
+  groupShapes PdfGroupShape[]
+
+  @@index([pdfFileId])
+  @@map("pdf_shapes")
+}
+
+model PdfPin {
+  id        String   @id @default(uuid())
+  pdfFileId String   @map("pdf_file_id")
+  x         Float
+  y         Float
+
+  pdfFile PdfFile @relation(fields: [pdfFileId], references: [id], onDelete: Cascade)
+
+  @@index([pdfFileId])
+  @@map("pdf_pins")
+}
+
+model PdfGroup {
+  id        String   @id @default(uuid())
+  pdfFileId String   @map("pdf_file_id")
+  pinId     String   @map("pin_id")
+  pinX      Float    @map("pin_x")
+  pinY      Float    @map("pin_y")
+
+  pdfFile     PdfFile         @relation(fields: [pdfFileId], references: [id], onDelete: Cascade)
+  groupShapes PdfGroupShape[]
+
+  @@index([pdfFileId])
+  @@map("pdf_groups")
+}
+
+model PdfGroupShape {
+  id        String   @id @default(uuid())
+  groupId   String   @map("group_id")
+  shapeId   String   @map("shape_id")
+  type      String
+  localX    Float    @map("local_x")
+  localY    Float    @map("local_y")
+  width     Float?
+  height    Float?
+  radius    Float?
+  color     String?
+  borderWidth  Float? @map("border_width")
+  radiusCorner Float? @map("radius_corner")
+
+  group PdfGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  shape PdfShape @relation(fields: [shapeId], references: [id], onDelete: Cascade)
+
+  @@unique([groupId, shapeId])
+  @@index([groupId])
+  @@map("pdf_group_shapes")
+}
+
+model PdfState {
+  id         String   @id @default(uuid())
+  pdfFileId  String   @unique @map("pdf_file_id")
+  viewMode   String   @default("scroll") @map("view_mode")
+  zoom       Decimal  @default(1) @db.Decimal(5, 2)
+  tool       String   @default("select")
+  drawShape  String   @default("rect") @map("draw_shape")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  pdfFile PdfFile @relation(fields: [pdfFileId], references: [id], onDelete: Cascade)
+
+  @@index([pdfFileId])
+  @@map("pdf_states")
+}
+
+model CapturedImage {
+  id         String   @id @default(uuid())
+  sequenceId Int      @unique @default(autoincrement()) @map("sequence_id")
+  userId     String   @map("user_id")
+  pdfFileId  String   @map("pdf_file_id")
+  s3Key      String   @map("s3_key")
+  width      Int
+  height     Int
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pdfFile PdfFile @relation(fields: [pdfFileId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([pdfFileId])
+  @@map("captured_images")
+}

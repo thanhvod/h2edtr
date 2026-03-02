@@ -1,0 +1,65 @@
+.scrollContainer {
+  overflow-y: auto;
+  height: 100%;
+}
+
+.pagePlaceholder {
+  width: var(--placeholder-w);
+  min-height: var(--placeholder-h);
+  background: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  font-size: 12px;
+}
+
+.pageImage {
+  width: var(--display-width);
+  height: var(--display-height);
+  object-fit: fill;
+  display: block;
+}
+
+.scaledWrapper {
+  min-height: var(--scaled-height);
+  padding-bottom: var(--bottom-toolbar-height);
+  box-sizing: content-box;
+}
+
+.zoomTransform {
+  min-height: var(--base-height);
+  transform: scale(var(--zoom));
+  transform-origin: 0 0;
+}
+
+.virtualContent {
+  height: var(--virtual-total-height);
+  position: relative;
+  padding: var(--gap);
+}
+
+.virtualRow {
+  position: absolute;
+  top: var(--row-top);
+  left: var(--gap);
+  right: var(--gap);
+  display: grid;
+  grid-template-columns: var(--grid-cols);
+  gap: var(--gap);
+}
+
+.cell {
+  min-height: var(--page-height);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: var(--grid-cols);
+  gap: 16px;
+  padding: 16px;
+  align-content: start;
+}
