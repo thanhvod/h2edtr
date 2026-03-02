@@ -14,8 +14,15 @@ async function bootstrap() {
       transform: true,
     }),
   )
+  const corsOrigins = [
+    'http://localhost:8080',
+    'http://localhost:5173',
+    'http://localhost:4000',
+    'https://h2edtr.site',
+    'https://admin.h2edtr.site',
+  ]
   app.enableCors({
-    origin: ['http://localhost:8080', 'http://localhost:5173', 'http://localhost:4000'],
+    origin: corsOrigins,
     credentials: true,
     allowedHeaders: ['Content-Type', 'X-Device-ID', 'X-Admin-Key', 'Authorization'],
     methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
