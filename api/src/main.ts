@@ -21,12 +21,20 @@ async function bootstrap() {
     'https://h2edtr.site',
     'https://admin.h2edtr.site',
   ]
+
+/*
   app.enableCors({
     origin: corsOrigins,
     credentials: true,
     allowedHeaders: ['Content-Type', 'X-Device-ID', 'X-Admin-Key', 'Authorization'],
-    methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+    methods: 'OPTIONS,GET,HEAD,PUT,PATCH,POST,DELETE'
   })
+*/
+app.enableCors({
+  origin: true,   // 👈 cho phép origin động
+  credentials: true,
+})
+
   const port = process.env.PORT ?? 3000
   await app.listen(port)
   console.log(`API running at http://localhost:${port}`)

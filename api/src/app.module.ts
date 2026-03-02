@@ -5,8 +5,12 @@ import { UsersModule } from './users/users.module'
 import { FilesModule } from './files/files.module'
 import { PdfsModule } from './pdfs/pdfs.module'
 import { AdminModule } from './admin/admin.module'
+import { ConfigModule } from '@nestjs/config';
+
 
 @Module({
-  imports: [PrismaModule, StorageModule, UsersModule, FilesModule, PdfsModule, AdminModule],
+  imports: [PrismaModule, StorageModule, UsersModule, FilesModule, PdfsModule, AdminModule, ConfigModule.forRoot({
+      isGlobal: true,
+    })],
 })
 export class AppModule {}
