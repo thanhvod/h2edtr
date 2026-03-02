@@ -17,6 +17,7 @@ export type EnsureUserResponse = {
  */
 export async function usersEnsure(deviceId: string): Promise<EnsureUserResponse> {
   const res = await fetch(`${getBaseUrl()}/api/users/ensure`, {
+    credentials: "include",
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -46,6 +47,7 @@ export type PdfListItem = {
  */
 export async function listPdfs(deviceId: string): Promise<PdfListItem[]> {
   const res = await fetch(`${getBaseUrl()}/api/pdfs`, {
+    credentials: "include",
     headers: getHeaders(deviceId),
   })
 
@@ -74,6 +76,7 @@ export async function uploadPdf(
   fileSize?: number,
 ): Promise<UploadPdfResponse> {
   const res = await fetch(`${getBaseUrl()}/api/pdfs`, {
+    credentials: "include",
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -103,6 +106,7 @@ export async function addPdfPage(
   data: { pageNumber: number; imageBase64: string; width: number; height: number },
 ): Promise<AddPageResponse> {
   const res = await fetch(`${getBaseUrl()}/api/pdfs/${pdfId}/pages`, {
+    credentials: "include",
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -128,6 +132,7 @@ export async function addPdfThumbnail(
   thumbnailBase64: string,
 ): Promise<{ ok: boolean }> {
   const res = await fetch(`${getBaseUrl()}/api/pdfs/${pdfId}/thumbnail`, {
+    credentials: "include",
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -156,6 +161,7 @@ export async function getPdfThumbnail(
   pdfId: string,
 ): Promise<GetPdfThumbnailResponse> {
   const res = await fetch(`${getBaseUrl()}/api/pdfs/${pdfId}/thumbnail`, {
+    credentials: "include",
     headers: getHeaders(deviceId),
   })
 
@@ -182,6 +188,7 @@ export async function getPdfPage(
   pageNumber: number,
 ): Promise<GetPdfPageResponse> {
   const res = await fetch(`${getBaseUrl()}/api/pdfs/${pdfId}/pages/${pageNumber}`, {
+    credentials: "include",
     headers: getHeaders(deviceId),
   })
 
@@ -224,6 +231,7 @@ export async function getPdfObjects(
   pdfId: string,
 ): Promise<PdfObjects> {
   const res = await fetch(`${getBaseUrl()}/api/pdfs/${pdfId}/objects`, {
+    credentials: "include",
     headers: getHeaders(deviceId),
   })
 
@@ -244,7 +252,9 @@ export type SharePdfData = PdfObjects & { numPages: number }
  * Public share: get PDF metadata + objects (no deviceId required).
  */
 export async function getSharePdfObjects(pdfId: string): Promise<SharePdfData> {
-  const res = await fetch(`${getBaseUrl()}/api/share/${pdfId}`)
+  const res = await fetch(`${getBaseUrl()}/api/share/${pdfId}`, {
+    credentials: "include",
+  })
   if (!res.ok) {
     const text = await res.text()
     throw new Error(`getSharePdfObjects failed: ${res.status} ${text}`)
@@ -259,7 +269,9 @@ export async function getSharePdfPage(
   pdfId: string,
   pageNumber: number,
 ): Promise<GetPdfPageResponse> {
-  const res = await fetch(`${getBaseUrl()}/api/share/${pdfId}/pages/${pageNumber}`)
+  const res = await fetch(`${getBaseUrl()}/api/share/${pdfId}/pages/${pageNumber}`, {
+    credentials: "include",
+  })
   if (!res.ok) {
     const text = await res.text()
     throw new Error(`getSharePdfPage failed: ${res.status} ${text}`)
@@ -277,6 +289,7 @@ export async function syncPdfObjects(
   },
 ): Promise<PdfObjects> {
   const res = await fetch(`${getBaseUrl()}/api/pdfs/${pdfId}/objects`, {
+    credentials: "include",
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
@@ -309,6 +322,7 @@ export async function listCapturedImages(
   pdfId: string,
 ): Promise<CapturedImageItem[]> {
   const res = await fetch(`${getBaseUrl()}/api/pdfs/${pdfId}/captured`, {
+    credentials: "include",
     headers: getHeaders(deviceId),
   })
   if (!res.ok) {
@@ -329,6 +343,7 @@ export async function uploadCapturedImage(
   imageBase64: string,
 ): Promise<UploadCapturedResponse> {
   const res = await fetch(`${getBaseUrl()}/api/pdfs/${pdfId}/captured`, {
+    credentials: "include",
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -351,6 +366,7 @@ export async function fetchPdfBlob(
   pdfId: string,
 ): Promise<ArrayBuffer> {
   const res = await fetch(`${getBaseUrl()}/api/files/${pdfId}/download`, {
+    credentials: "include",
     headers: getHeaders(deviceId),
   })
   if (!res.ok) {
@@ -370,7 +386,7 @@ export async function fetchCapturedImageBlob(
 ): Promise<Blob> {
   const res = await fetch(
     `${getBaseUrl()}/api/pdfs/${pdfId}/captured/${capturedId}/download`,
-    { headers: getHeaders(deviceId) },
+    { credentials: "include", headers: getHeaders(deviceId) },
   )
   if (!res.ok) {
     const text = await res.text()
@@ -388,6 +404,7 @@ export async function deleteCapturedImage(
   capturedId: string,
 ): Promise<{ deleted: boolean }> {
   const res = await fetch(`${getBaseUrl()}/api/pdfs/${pdfId}/captured/${capturedId}`, {
+    credentials: "include",
     method: 'DELETE',
     headers: getHeaders(deviceId),
   })
